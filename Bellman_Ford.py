@@ -1,24 +1,30 @@
 INF = float('inf')
 
-def bellman_ford(graph, start):
-    # Khởi tạo khoảng cách từ đỉnh bắt đầu đến tất cả các đỉnh khác là vô cùng
-    dist = {v: INF for v in graph}
-    dist[start] = 0
+def bellman_ford(graph, src, dst):
+    # Khởi tạo khoảng cách từ đỉnh bắt đầu đến các đỉnh khác là vô cực
+    distance = {node: float('inf') for node in graph}
+    distance[src] = 0
+    path = dict()
 
-    # Lặp qua tất cả các cạnh và cập nhật khoảng cách nếu cần
-    for _ in range(len(graph) - 1):
+    # Thực hiện thuật toán Bellman-Ford
+    for i in range(len(graph) - 1):
         for u in graph:
             for v in graph[u]:
-                if dist[u] + graph[u][v] < dist[v]:
-                    dist[v] = dist[u] + graph[u][v]
+                if distance[u] + graph[u][v] < distance[v]:
+                    distance[v] = distance[u] + graph[u][v]
+                    path[u] = v
 
-    # Kiểm tra xem có chu trình âm hay không
+    # Kiểm tra nếu có chu trình âm trong đồ thị
     for u in graph:
         for v in graph[u]:
-            if dist[u] + graph[u][v] < dist[v]:
-                raise ValueError("Chu trình âm tồn tại!")
+            assert distance[v] <= distance[u] + graph[u][v], "Đồ thị có chu trình âm"
 
-    return dist
+
+    result = [src]
+    for m, n in path.items():
+        result.append(n)
+    # Trả về khoảng cách từ đỉnh bắt đầu đến đỉnh kết thúc
+    return distance[dst], result
 
 graph = {
     'A': {'B': 5, 'C': 1},
@@ -30,3 +36,4 @@ graph = {
 }
 
 start = 'A'
+print(bellman_ford(graph, start, 'E'))

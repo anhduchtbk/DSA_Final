@@ -1,4 +1,6 @@
 import heapq
+from test import graph
+
 
 def dijkstra(graph, start, end):
     # Khởi tạo khoảng cách ban đầu và hàng đợi ưu tiên
@@ -44,5 +46,5 @@ graph = {
 
 start = 'A'
 
-distances = dijkstra(graph, start, end='E')
+distances = dijkstra(graph, start, end='C')
 print(distances)
